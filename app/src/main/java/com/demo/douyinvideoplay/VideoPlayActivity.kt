@@ -23,7 +23,7 @@ class VideoPlayActivity : AppCompatActivity() {
 
     private fun initView() {
         mLayoutManager = ViewPagerLayoutManager(this, OrientationHelper.VERTICAL);
-        val mAdapter = MyAdapter(packageName);
+        val mAdapter = MyAdapter();
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -49,14 +49,11 @@ class VideoPlayActivity : AppCompatActivity() {
         })
     }
 
-    class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder> {
+    inner class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private val imgs = intArrayOf(R.mipmap.img_video_1, R.mipmap.img_video_2)
         private val videos = intArrayOf(R.raw.video_1, R.raw.video_2)
-        private var mPackageName = ""
 
-        constructor(packageName: String) : super() {
-            mPackageName = packageName
-        }
+        constructor() : super() {}
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.item_view_pager, parent, false)
@@ -64,7 +61,7 @@ class VideoPlayActivity : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val url = "android.resource://${mPackageName}/${videos[position % 2]}"
+            val url = "android.resource://${packageName}/${videos[position % 2]}"
             val videoEntity = VideoEntity(url, imgs[position % 2])
             holder.mDyVideoPageView?.initVieo(videoEntity)
         }
@@ -73,7 +70,7 @@ class VideoPlayActivity : AppCompatActivity() {
             return 20
         }
 
-        class ViewHolder : RecyclerView.ViewHolder {
+        inner class ViewHolder : RecyclerView.ViewHolder {
             var mDyVideoPageView: VideoPageView? = null
 
             constructor(itemView: View) : super(itemView) {
