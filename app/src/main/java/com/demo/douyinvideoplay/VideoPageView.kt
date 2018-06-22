@@ -43,6 +43,8 @@ class VideoPageView : LinearLayout {
         mLoveAinmView.setTouchListener(object : LoveAnimationView.LoveAnimViewTouchListener {
             override fun onDoubleClick() {
                 //点赞
+                if (!mLikeBtnView.isChecked())
+                    mLikeBtnView.performClick()
             }
 
             override fun onOneClick() {

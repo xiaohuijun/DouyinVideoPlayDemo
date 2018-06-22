@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LikeButtonView">
+        <attr name="starCheckedImageRes" format="reference" />
+        <attr name="starUnCheckedImageRes" format="reference" />
+        <attr name="layoutId" format="reference" />
+        <attr name="canCancelLike" format="boolean" />
+    </declare-styleable>
+</resources>

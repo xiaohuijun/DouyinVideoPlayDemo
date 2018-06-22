@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.demo.douyinvideoplay.likeBtnView.DotsView
+        android:id="@+id/vDotsView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true" />
+
+    <com.demo.douyinvideoplay.likeBtnView.CircleView
+        android:id="@+id/vCircle"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_centerInParent="true" />
+
+    <ImageView
+        android:id="@+id/ivStar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/ic_star_rate_off" />
+
+</RelativeLayout>

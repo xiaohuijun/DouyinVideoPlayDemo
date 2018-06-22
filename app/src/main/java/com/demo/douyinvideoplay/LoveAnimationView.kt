@@ -16,6 +16,7 @@ class LoveAnimationView : FrameLayout {
     private val IMAGE_SIZ = 350
     private lateinit var mContext: Context
     private var mDetector: GestureDetector? = null
+    private var mLastDoubleClickTime = 0L
     private val startDurationTime = 150L
     private val durationTime = 500L
     private val delay = 400L
@@ -47,13 +48,15 @@ class LoveAnimationView : FrameLayout {
 
     private val mListener = object : GestureDetector.SimpleOnGestureListener() {
         override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-            mTouchListener?.onOneClick()
+            if (System.currentTimeMillis() - mLastDoubleClickTime > 300)
+                mTouchListener?.onOneClick()
             return super.onSingleTapConfirmed(e)
         }
 
         override fun onDoubleTap(e: MotionEvent): Boolean {
             startLoveAnimal(e.getX(), e.getY())
             mTouchListener?.onDoubleClick()
+            mLastDoubleClickTime = System.currentTimeMillis()
             return super.onDoubleTap(e)
         }
     }
