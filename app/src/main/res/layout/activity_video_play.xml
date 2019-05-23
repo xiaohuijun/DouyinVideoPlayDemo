@@ -5,10 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/mRecyclerView"
+    <com.demo.douyinvideoplay.viewpager2.ViewPager2
+        android:id="@+id/view_pager2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:android_orientation="1"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

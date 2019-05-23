@@ -8,12 +8,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.demo.douyinvideoplay.viewpager2.ViewPager2
 import kotlinx.android.synthetic.main.activity_video_play.*
 
 class VideoPlayActivity : AppCompatActivity() {
     private val TAG = "VideoPlayActivity"
-    private var mLayoutManager: ViewPagerLayoutManager? = null
-    private var mLastPosition = 0
+    private var mLastPosition = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_play)
@@ -22,31 +22,26 @@ class VideoPlayActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        mLayoutManager = ViewPagerLayoutManager(this, OrientationHelper.VERTICAL);
-        val mAdapter = MyAdapter();
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+        view_pager2.adapter = MyAdapter()
+        view_pager2.offscreenPageLimit = 2
     }
 
     private fun setViewListener() {
-        mLayoutManager?.setOnViewPagerListener(object : OnViewPagerListener {
-            override fun onPageRelease(itemView: View, isNext: Boolean, position: Int) {
-                Log.e(TAG, "释放位置:$position 下一页:$isNext")
-                val mDyVideoPageView: VideoPageView = itemView.findViewById(R.id.mDyVideoPageView)
-                mDyVideoPageView.onPageUnSelected()
+        view_pager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
             }
 
-            override fun onPageSelected(itemView: View, position: Int, isBottom: Boolean) {
-                Log.e(TAG, "选中位置:$position  是否是滑动到底部:$isBottom")
-                val mDyVideoPageView: VideoPageView = itemView.findViewById(R.id.mDyVideoPageView)
-                mDyVideoPageView.onPageSelected()
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+            }
+
+            override fun onPageSelected(position: Int) {
+                getDouYinPageView(mLastPosition)?.onPageUnSelected();
+                getDouYinPageView(position)?.onPageSelected()
                 mLastPosition = position
             }
-
-            override fun onPageScrollStateChanged(state: Int) {
-
-            }
-        })
+        });
     }
 
     inner class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder> {
@@ -79,32 +74,28 @@ class VideoPlayActivity : AppCompatActivity() {
         }
     }
 
-    private fun getDouYinPageView(postion: Int): VideoPageView? {
-        val view = mLayoutManager?.findViewByPosition(postion)
+    private fun getDouYinPageView(position: Int): VideoPageView? {
+        if (position < 0) return null;
+        val view = view_pager2?.getPageViewByPosition(position)
         val douyinVideoPageView: VideoPageView? = view?.findViewById(R.id.mDyVideoPageView)
         return douyinVideoPageView
     }
 
     override fun onResume() {
         MApplication.isDouyinVideoFragmentVisible = true
-        val douYinPageView = getDouYinPageView(mLastPosition)
-        douYinPageView?.onResume()
+        getDouYinPageView(mLastPosition)?.onResume()
         super.onResume()
     }
 
 
     override fun onPause() {
-        MApplication.isDouyinVideoFragmentVisible = false;
-        val douYinPageView = getDouYinPageView(mLastPosition);
-        douYinPageView?.onPause();
-        super.onPause();
+        MApplication.isDouyinVideoFragmentVisible = false
+        getDouYinPageView(mLastPosition)?.onPause()
+        super.onPause()
     }
 
     override fun onDestroy() {
-        val douYinPageView = getDouYinPageView(mLastPosition);
-        if (douYinPageView != null) {
-            douYinPageView.onDestroy();
-        }
-        super.onDestroy();
+        getDouYinPageView(mLastPosition)?.onDestroy()
+        super.onDestroy()
     }
 }
